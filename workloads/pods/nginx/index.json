@@ -1,0 +1,29 @@
+{
+  "title": "Nginx Pod with ConfigMap Volume",
+  "description": "Create an nginx Pod and customise its served content using a ConfigMap mounted as a volume",
+  "details": {
+    "intro": {
+      "text": "intro.md"
+    },
+    "steps": [
+      {
+        "title": "Create a ConfigMap with custom HTML",
+        "text": "step1.md"
+      },
+      {
+        "title": "Create an nginx Pod mounting the ConfigMap",
+        "text": "step2.md"
+      },
+      {
+        "title": "Verify the custom content is served",
+        "text": "step3.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-1node"
+  }
+}
