@@ -1,0 +1,141 @@
+{
+  "title": "CKA 2025 Mock Exam",
+  "description": "A full 15-question CKA-style mock exam covering Gateway API, CNI, storage, RBAC, scheduling, and more — with built-in verification for every question.",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "background": {
+        "text": "setup.sh",
+        "progressMessage": "Setting up exam environment…"
+      }
+    },
+    "steps": [
+      {
+        "title": "Q1 (8%) — Gateway API: Install & Basic Routing",
+        "text": "step1.md",
+        "verify": {
+          "text": "verify1.sh",
+          "hint": "Check that GatewayClass 'nginx' exists and Gateway 'web-gateway' in namespace 'gw-demo' has condition Programmed=True."
+        }
+      },
+      {
+        "title": "Q2 (7%) — HTTPRoute Traffic Splitting",
+        "text": "step2.md",
+        "verify": {
+          "text": "verify2.sh",
+          "hint": "Check that HTTPRoute 'app-route' exists in 'gw-demo' with backendRefs for both app-v1-svc (weight 80) and app-v2-svc (weight 20), and a header-match rule sending x-canary:true to app-v2-svc."
+        }
+      },
+      {
+        "title": "Q3 (7%) — CNI: Replace with Cilium",
+        "text": "step3.md",
+        "verify": {
+          "text": "verify3.sh",
+          "hint": "Check that the cilium DaemonSet is running in kube-system, both nodes are Ready, and Hubble is enabled."
+        }
+      },
+      {
+        "title": "Q4 (6%) — Node-Level Kubelet Configuration",
+        "text": "step4.md",
+        "verify": {
+          "text": "verify4.sh",
+          "hint": "Check /api/v1/nodes/node01/proxy/configz for maxPods=80, evictionHard memory.available=200Mi, systemReserved cpu=200m."
+        }
+      },
+      {
+        "title": "Q5 (8%) — HPA on Custom Metrics",
+        "text": "step5.md",
+        "verify": {
+          "text": "verify5.sh",
+          "hint": "Check HPA 'orders-hpa' exists in 'metrics-demo', targets 'orders-api', has minReplicas=2 and maxReplicas=10."
+        }
+      },
+      {
+        "title": "Q6 (5%) — Startup + Readiness + Liveness Probes",
+        "text": "step6.md",
+        "verify": {
+          "text": "verify6.sh",
+          "hint": "Check Deployment 'slow-boot' in 'probes-lab' has all three probe types configured, and startupProbe failureThreshold × periodSeconds ≥ 120."
+        }
+      },
+      {
+        "title": "Q7 (5%) — Projected Volume",
+        "text": "step7.md",
+        "verify": {
+          "text": "verify7.sh",
+          "hint": "Check Pod 'audit-agent' in 'proj-vol' is Running and all four projected sources are present under /etc/agent/."
+        }
+      },
+      {
+        "title": "Q8 (8%) — etcd Backup & Restore",
+        "text": "step8.md",
+        "verify": {
+          "text": "verify8.sh",
+          "hint": "Check that a snapshot exists under /opt/backups/, the cluster is healthy, and namespace 'will-be-lost' no longer exists."
+        }
+      },
+      {
+        "title": "Q9 (5%) — PV / PVC with hostPath",
+        "text": "step9.md",
+        "verify": {
+          "text": "verify9.sh",
+          "hint": "Check PV 'app1-pv' and PVC 'app1-pvc' are Bound, and Deployment 'writer' has at least one ready replica in 'storage-lab'."
+        }
+      },
+      {
+        "title": "Q10 (6%) — NetworkPolicy: Default-Deny + Selective Allow",
+        "text": "step10.md",
+        "verify": {
+          "text": "verify10.sh",
+          "hint": "Check that a default-deny policy (empty podSelector, both Ingress and Egress in policyTypes) exists in 'np-lab', plus at least 3 selective-allow policies."
+        }
+      },
+      {
+        "title": "Q11 (4%) — Native Sidecar Container",
+        "text": "step11.md",
+        "verify": {
+          "text": "verify11.sh",
+          "hint": "Check Deployment 'web-with-logger' in 'sidecar-lab' has an initContainer with restartPolicy: Always and a shared emptyDir volume."
+        }
+      },
+      {
+        "title": "Q12 (7%) — Troubleshoot a NotReady Node",
+        "text": "step12.md",
+        "verify": {
+          "text": "verify12.sh",
+          "hint": "Check that the worker node (node01) is in Ready state."
+        }
+      },
+      {
+        "title": "Q13 (8%) — kubeadm Cluster Upgrade",
+        "text": "step13.md",
+        "verify": {
+          "text": "verify13.sh",
+          "hint": "Check all nodes report the same kubelet version and all kube-system pods are Running or Completed."
+        }
+      },
+      {
+        "title": "Q14 (5%) — RBAC: Scoped ServiceAccount",
+        "text": "step14.md",
+        "verify": {
+          "text": "verify14.sh",
+          "hint": "Check ServiceAccount 'deploy-bot', a Role granting deployments/replicasets/pods access, and a RoleBinding exist in 'rbac-lab'."
+        }
+      },
+      {
+        "title": "Q15 (6%) — Taints, Tolerations & Topology Spread",
+        "text": "step15.md",
+        "verify": {
+          "text": "verify15.sh",
+          "hint": "Check controlplane has taint workload=critical:NoSchedule, both nodes have zone labels, and Deployment 'critical-app' has topologySpreadConstraints with maxSkew=1."
+        }
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-2nodes"
+  }
+}
