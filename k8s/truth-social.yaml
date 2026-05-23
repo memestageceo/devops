@@ -74,6 +74,8 @@ metadata:
 spec:
   parentRefs:
   - name: nginx-gateway
+  hostnames:
+    - "k8s.example.com"
   rules:
   - matches:
     - path:
