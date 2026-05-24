@@ -13,3 +13,14 @@ spec:
     allowedRoutes:
       namespaces:
         from: Same
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: k8s.example.com
+    tls:
+      mode: Terminate
+      certificateRefs:
+        - name: gateway-tls
+    allowedRoutes:
+      namespaces:
+        from: Same

@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+vars:
+  GREETING: Initiating Cluster...
+
+tasks:
+  default:
+    desc: Print a greeting message
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+  delete-cluster:
+    desc: delete existing kind cluster
+    cmds:
+      - kind delete cluster
+    silent: false
+  create-cluster:
+    desc: create a new kind cluster
+    cmds:
+      - kind create cluster --config=./cluster-config.yaml
+    silent: false
+  add-gateway:
+    desc: add API resources and install Nginx Gateway Fabric
+    cmds:
+      - kubectl kustomize "https://github.com/nginx/nginx-gateway-fabric/config/crd/gateway-api/standard?ref=v2.6.2" | kubectl apply -f -
+      - helm upgrade --install ngf oci://ghcr.io/nginx/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway --set nginx.service.type=NodePort --set-json 'nginx.service.nodePorts=[{"port":31437,"listenerPort":80}, {"port":30478,"listenerPort":8443}]'
+      - kubectl wait --timeout=5m -n nginx-gateway deployment/ngf-nginx-gateway-fabric --for=condition=Available
+  create-certs:
+    desc: create certificate & key pair for TLS
+    status:
+      - test -f tls.crt
+      - test -f tls.key
+    cmds:
+      - |-
+        openssl req -x509 -nodes -days 365 \
+          -newkey rsa:2048 \
+          -keyout tls.key \
+          -out tls.crt \
+          -subj "/CN=example.com/O=example.com"
+  create-secret:
+    desc: create secret from tls pair
+    cmds:
+      - kubectl create secret tls gateway-tls --cert=./tls.crt --key=./tls.key
+  kapply:
+    desc: apply the kustomize file
+    cmds:
+      - kubectl apply -k .
+    silent: false
+  all:
+    desc: run all tasks sequentially
+    cmds:
+      - task: default
+      - task: delete-cluster
+      - task: create-cluster
+      - task: add-gateway
+      - task: create-certs
+      - task: kapply
