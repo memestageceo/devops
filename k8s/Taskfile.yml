@@ -4,7 +4,7 @@ version: "3"
 
 vars:
   GREETING: Initiating Cluster...
-
+  DOMAIN: "k8s.local"
 tasks:
   default:
     desc: Print a greeting message
@@ -42,7 +42,6 @@ tasks:
       - kubectl apply -f ./issuer.yaml
       - kubectl apply -f ./server-tls.yaml
       - kubectl apply -f ./agent-tls.yaml
-
   install-gateway:
     desc: install nginx gateway fabric
     cmds:
@@ -59,7 +58,7 @@ tasks:
           -newkey rsa:2048 \
           -keyout tls.key \
           -out tls.crt \
-          -subj "/CN=example.com/O=example.com"
+          -subj "/CN={{.DOMAIN}}/O={{.DOMAIN}}"
   create-secret:
     desc: create secret from tls pair
     cmds:
@@ -76,5 +75,7 @@ tasks:
       - task: delete-cluster
       - task: create-cluster
       - task: add-gateway
+      - task: add-cert-mgr
+      - task: install-gateway
       - task: create-certs
       - task: kapply

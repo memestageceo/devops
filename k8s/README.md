@@ -1,5 +1,13 @@
 # Kubernetes Gateway API & URL Rewrite
 
+```mermaid
+flowchart LR
+    A[User] -->|connects to| B("apps.k8s.local")
+    B -->|:8443| C@{ shape: "circle", label: "HTTP Route"}
+    C -->|/bitcoin| D[Bitcoin]
+    C -->|/turh| E[Truth-Social]
+```
+
 ## create openssl crt/key pair
 
 ```bash

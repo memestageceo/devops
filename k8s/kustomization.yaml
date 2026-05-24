@@ -1,3 +1,5 @@
 resources:
   - gateway.yaml
   - truth-social.yaml
+  - bitcoin.yaml
+  - routes.yaml
