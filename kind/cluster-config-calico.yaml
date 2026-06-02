@@ -2,12 +2,6 @@ apiVersion: kind.x-k8s.io/v1alpha4
 kind: Cluster
 nodes:
   - role: control-plane
-    kubeadmConfigPatches:
-    - |
-      kind: ClusterConfiguration
-      apiServer:
-          extraArgs:
-            enable-admission-plugins: NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook    
     extraPortMappings:
       - containerPort: 31437
         hostPort: 8080
@@ -23,7 +17,7 @@ nodes:
       tier: backend
   - role: worker
     labels:
-      node-restriction.kubernetes.io/tier: storage
+      tier: storage
     extraMounts:
       - hostPath: /tmp/kind-files
         containerPath: /files
@@ -33,3 +27,6 @@ nodes:
         nodeRegistration:
           kubeletExtraArgs:
             register-with-taints: "storage=required:NoSchedule"
+networking:
+  disableDefaultCNI: true
+  podSubnet: 192.168.0.0/16
