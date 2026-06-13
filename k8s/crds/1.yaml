@@ -1,0 +1,47 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  # name must match the spec fields below, and be in the form: <plural>.<group>
+  name: appconfigs.config.mycompany.com
+spec:
+  # group name to use for REST API: /apis/<group>/<version>
+  group: config.mycompany.com
+  # list of versions supported by this CustomResourceDefinition
+  versions:
+    - name: v1
+      # Each version can be enabled/disabled by Served flag.
+      served: true
+      # One and only one version must be marked as the storage version.
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+              environment:
+                type: string
+                enum: ["production", "staging"]
+              region:
+                type: string
+              replicaCount:
+                type: integer
+  # either Namespaced or Cluster
+  scope: Namespaced
+  names:
+    # plural name to be used in the URL: /apis/<group>/<version>/<plural>
+    plural: appconfigs
+    # singular name to be used as an alias on the CLI and for display
+    singular: appconfig
+    # kind is normally the CamelCased singular type. Your resource manifests use this.
+    kind: AppConfig
+    # shortNames allow shorter string to match your resource on the CLI
+    shortNames:
+    - apg
+
+---
+apiVersion: config.mycompany.com/v1
+kind: AppConfig
+metadata:
+  name: payments-config
+environment: production
+region: "us-east-1"
+replicaCount: 3
