@@ -1,0 +1,16 @@
+apiVersion: db.ops.io/v1alpha1
+kind: DatabaseSnapshot
+metadata:
+  name: mysql-prod-snap
+databaseName: orders_db
+retentionDays: 12
+snapshotType: full
+
+---
+apiVersion: db.ops.io/v1alpha1
+kind: DatabaseSnapshot
+metadata:
+  name: rejected-snap
+databaseName: orders_db
+retentionDays: 12
+snapshotType: maniacal

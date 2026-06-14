@@ -1,0 +1,7 @@
+apiVersion: scheduling.platform.io/v1beta1
+kind: JobPolicy
+metadata:
+  name: nightly-report
+spec:
+  schedule: "* * * * */5"
+  parallelism: 3
